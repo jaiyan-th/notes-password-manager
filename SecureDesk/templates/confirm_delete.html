@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Confirm Delete - SecureWebApp{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card" style="border: 1px solid #B12704;">
+            <div class="card-header" style="background-color: #FFEAEA; border-bottom: 1px solid #B12704;">
+                <h4 class="mb-0" style="color: #B12704; font-weight: 400;">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert" style="background-color: #FFF4E6; border: 1px solid var(--amazon-orange); color: #B25D00;">
+                    <i class="fas fa-warning me-2"></i>
+                    <strong>Warning:</strong> This action cannot be undone.
+                </div>
+                
+                <p class="mb-3">
+                    Are you sure you want to delete this {{ item_type }}?
+                </p>
+                
+                <div class="card bg-light">
+                    <div class="card-body">
+                        {% if item_type == 'note' %}
+                            <h6 class="card-title">{{ item.title }}</h6>
+                            <p class="card-text text-muted">
+                                {{ item.content[:100] if item.content else 'No content' }}
+                                {% if item.content and item.content|length > 100 %}...{% endif %}
+                            </p>
+                        {% elif item_type == 'password entry' %}
+                            <h6 class="card-title">
+                                <i class="fas fa-globe me-2"></i>{{ item.service_name }}
+                            </h6>
+                            <p class="card-text text-muted">
+                                <i class="fas fa-user me-1"></i>{{ item.username }}
+                            </p>
+                        {% endif %}
+                        <small class="text-muted">
+                            Created: {{ item.created_at.strftime('%B %d, %Y at %I:%M %p') }}
+                        </small>
+                    </div>
+                </div>
+                
+                <form method="POST" class="mt-4">
+                    {{ form.hidden_tag() }}
+                    {{ form.item_id() }}
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ cancel_url }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn" style="background-color: #B12704; border-color: #B12704; color: white;">
+                            <i class="fas fa-trash me-2"></i>Delete {{ item_type.title() }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

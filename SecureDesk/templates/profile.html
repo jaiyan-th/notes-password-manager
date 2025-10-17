@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - SecureWebApp{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="h2 mb-4" style="color: var(--amazon-text); font-weight: 400;">Your Account</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Account Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Email:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ user.email }}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Member Since:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {{ user.created_at.strftime('%B %d, %Y') }}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-sm-3">
+                        <strong>Last Login:</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        {% if user.last_login %}
+                            {{ user.last_login.strftime('%B %d, %Y at %I:%M %p') }}
+                        {% else %}
+                            First time login
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">Account Statistics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-6">
+                        <div class="card stats-card text-white">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ user.notes|length }}</h3>
+                                <p class="card-text">Total Notes</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card stats-card text-white">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ user.password_entries|length }}</h3>
+                                <p class="card-text">Stored Passwords</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Account Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                        <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                    </a>
+                    <a href="{{ url_for('notes.list_notes') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-sticky-note me-2"></i>Manage Notes
+                    </a>
+                    <a href="{{ url_for('passwords.list_passwords') }}" class="btn btn-outline-success">
+                        <i class="fas fa-key me-2"></i>Manage Passwords
+                    </a>
+                    <hr>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Amazon-style Security Information -->
+        <div class="card mt-3" style="border: 1px solid var(--amazon-blue);">
+            <div class="card-header" style="background-color: var(--amazon-blue); color: white;">
+                <h6 class="mb-0">
+                    <i class="fas fa-shield-alt me-2"></i>Security Information
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-check me-2" style="color: #067D62;"></i>
+                        Password encrypted with bcrypt
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check me-2" style="color: #067D62;"></i>
+                        Stored passwords use AES encryption
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check me-2" style="color: #067D62;"></i>
+                        Session timeout: 30 minutes
+                    </li>
+                    <li>
+                        <i class="fas fa-check me-2" style="color: #067D62;"></i>
+                        Data isolated per user
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
