@@ -1,1 +1,0 @@
-# notes-password-manager
