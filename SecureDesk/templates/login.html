@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Login - SecureDesk{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 0 auto;">
+    <div class="card">
+        <h2 style="margin-bottom: 30px; text-align: center;">Login to SecureDesk</h2>
+        
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.email.label }}
+                {% if form.email.errors %}
+                    {{ form.email(class="form-control is-invalid") }}
+                    {% for error in form.email.errors %}
+                        <span class="error">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.email(class="form-control") }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label }}
+                {% if form.password.errors %}
+                    {{ form.password(class="form-control is-invalid") }}
+                    {% for error in form.password.errors %}
+                        <span class="error">{{ error }}</span>
+                    {% endfor %}
+                {% else %}
+                    {{ form.password(class="form-control") }}
+                {% endif %}
+            </div>
+
+            <button type="submit" style="width: 100%;">{{ form.submit.label }}</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <p>Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

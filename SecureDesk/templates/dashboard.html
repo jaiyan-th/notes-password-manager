@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - SecureDesk{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 30px;">Welcome, {{ current_user.email }}!</h2>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;">
+    <div class="card">
+        <h3>📝 Notes</h3>
+        <p style="font-size: 32px; color: #FF9900; font-weight: bold; margin: 20px 0;">{{ total_notes }}</p>
+        <a href="{{ url_for('notes.list_notes') }}" style="display: inline-block; margin-top: 10px;">View Notes →</a>
+    </div>
+
+    <div class="card">
+        <h3>🔐 Passwords</h3>
+        <p style="font-size: 32px; color: #FF9900; font-weight: bold; margin: 20px 0;">{{ total_passwords }}</p>
+        <a href="{{ url_for('passwords.list_passwords') }}" style="display: inline-block; margin-top: 10px;">View Passwords →</a>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+    {% if recent_notes %}
+    <div class="card">
+        <h3>Recent Notes</h3>
+        <ul style="list-style: none;">
+            {% for note in recent_notes %}
+            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                <a href="{{ url_for('notes.view_note', note_id=note.id) }}">{{ note.title }}</a>
+                <small style="color: #999; display: block;">{{ note.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if recent_passwords %}
+    <div class="card">
+        <h3>Recent Passwords</h3>
+        <ul style="list-style: none;">
+            {% for password in recent_passwords %}
+            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
+                <a href="{{ url_for('passwords.view_password', password_id=password.id) }}">{{ password.service_name }}</a>
+                <small style="color: #999; display: block;">{{ password.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

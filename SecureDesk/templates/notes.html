@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Notes - SecureDesk{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <h2>📝 My Notes</h2>
+    <a href="{{ url_for('notes.create_note') }}" style="padding: 10px 20px; background-color: #FF9900; color: white; border-radius: 4px; text-decoration: none;">+ New Note</a>
+</div>
+
+<div class="card" style="margin-bottom: 30px;">
+    <form method="GET" style="display: flex; gap: 10px;">
+        <input type="text" name="q" value="{{ search_query }}" placeholder="Search notes..." style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+{% if notes.items %}
+    {% for note in notes.items %}
+    <div class="card" style="margin-bottom: 15px; cursor: pointer; transition: box-shadow 0.2s;" onclick="window.location.href='{{ url_for('notes_bp.view_note', note_id=note.id) }}'">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+                <h3>{{ note.title }}</h3>
+                <p style="color: #666; margin-top: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 600px;">{{ note.content[:100] }}{% if note.content|length > 100 %}...{% endif %}</p>
+                <small style="color: #999; margin-top: 10px; display: block;">{{ note.created_at.strftime('%Y-%m-%d %H:%M') }}{% if note.updated_at != note.created_at %} (Updated: {{ note.updated_at.strftime('%Y-%m-%d %H:%M') }}){% endif %}</small>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <a href="{{ url_for('notes_bp.edit_note', note_id=note.id) }}" style="padding: 8px 16px; background-color: #e0e0e0; color: #333; border-radius: 4px; text-decoration: none; font-size: 13px;">Edit</a>
+                <a href="{{ url_for('notes_bp.delete_note', note_id=note.id) }}" style="padding: 8px 16px; background-color: #f3f3f3; color: #d32f2f; border-radius: 4px; text-decoration: none; font-size: 13px;" onclick="return confirm('Are you sure?');">Delete</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% if notes.pages > 1 %}
+    <div style="margin-top: 30px; text-align: center;">
+        {% if notes.has_prev %}
+            <a href="{{ url_for('notes.list_notes', page=notes.prev_num, q=search_query) }}" style="padding: 10px 15px; background-color: #ddd; border-radius: 4px; text-decoration: none; margin-right: 10px;">← Previous</a>
+        {% endif %}
+        
+        Page {{ notes.page }} of {{ notes.pages }}
+        
+        {% if notes.has_next %}
+            <a href="{{ url_for('notes.list_notes', page=notes.next_num, q=search_query) }}" style="padding: 10px 15px; background-color: #ddd; border-radius: 4px; text-decoration: none; margin-left: 10px;">Next →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+{% else %}
+    <div class="card" style="text-align: center; padding: 40px;">
+        <p style="color: #999; font-size: 16px;">No notes found. <a href="{{ url_for('notes.create_note') }}">Create your first note</a></p>
+    </div>
+{% endif %}
+{% endblock %}
